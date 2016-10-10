@@ -2,11 +2,11 @@
 
 /**
  * Plugin Name:       Modularity OnePage
- * Plugin URI:        (#plugin_url#)
+ * Plugin URI:        https://github.com/helsingborg-stad/modularity-onepage/
  * Description:       Adds the ability to create one-page-ish layouts to Modularity
  * Version:           1.0.0
- * Author:            Sebastian Thulin
- * Author URI:        (#plugin_author_url#)
+ * Author:            Sebastian Thulin, Kristoffer Svanmark
+ * Author URI:        https://github.com/helsingborg-stad/
  * License:           MIT
  * License URI:       https://opensource.org/licenses/MIT
  * Text Domain:       modularity-onepage
