@@ -42,7 +42,10 @@ class Display
             $section->ID // %1$i
         );
 
-        $markup = '<section class="' . $sectionClasses . '"><div class="container">';
+        $markup = apply_filters(
+            'ModularityOnePage/before_section',
+            '<section class="' . $sectionClasses . '"><div class="container"><div class="grid">'
+        );
         $modules = \Modularity\Editor::getPostModules($section->ID);
         if (!isset($modules['onepage-sidebar'])) {
             $modules = false;
@@ -59,6 +62,11 @@ class Display
             $markup .= \Modularity\App::$display->outputModule($module, $wp_registered_sidebars['onepage-sidebar'], array(), false);
         }
 
-        return $markup . '</div></section>';
+        $markup .= apply_filters(
+            'ModularityOnePage/after_section',
+            '</div></div></section>'
+        );
+
+        return $markup;
     }
 }

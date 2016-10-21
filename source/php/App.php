@@ -9,7 +9,26 @@ class App
         add_action('init', array($this, 'registerPostType'));
         add_action('widgets_init', array($this, 'registerSidebar'));
         add_filter('Modularity/CoreTemplatesSearchPaths', array($this, 'addTemplateSearchPaths'));
+
+        add_filter('template_include', array($this, 'singleTemplate'));
     }
+
+    /**
+     * Get the single template for onepage single posts
+     * @param  string $template Default template
+     * @return string           Template to use
+     */
+    public function singleTemplate($template)
+    {
+        $queriedObject = get_queried_object();
+
+        if (isset($queriedObject->post_type) && $queriedObject->post_type === 'onepage' && is_single()) {
+            return MODULARITY_ONEPAGE_TEMPLATE_PATH . 'single-onepage.php';
+        }
+
+        return $template;
+    }
+
 
     public function registerSidebar()
     {
@@ -17,7 +36,7 @@ class App
             'id'            => 'onepage-sidebar',
             'name'          => __('Onepage sidebar (Modularity Onepage)', 'modularity-onepage'),
             'description'   => __('The onepage sidebar area', 'modularity-onepage'),
-            'before_widget' => apply_filters('ModularityOnePage/before_widget', '<div class="%2$s">'),
+            'before_widget' => apply_filters('ModularityOnePage/before_widget', '<div class="grid-sm-12 %2$s">'),
             'after_widget'  => apply_filters('ModularityOnePage/after_widget', '</div>'),
             'before_title'  => apply_filters('ModularityOnePage/before_title', '<h3>'),
             'after_title'   => apply_filters('ModularityOnePage/after_title', '</h3>')
