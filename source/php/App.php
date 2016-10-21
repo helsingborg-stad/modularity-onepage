@@ -9,23 +9,6 @@ class App
         add_action('init', array($this, 'registerPostType'));
         add_action('widgets_init', array($this, 'registerSidebar'));
         add_filter('Modularity/CoreTemplatesSearchPaths', array($this, 'addTemplateSearchPaths'));
-        add_filter('template_include', array($this, 'singleTemplate'));
-    }
-
-    /**
-     * Get the single template for onepage single posts
-     * @param  string $template Default template
-     * @return string           Template to use
-     */
-    public function singleTemplate($template)
-    {
-        $queriedObject = get_queried_object();
-
-        if (isset($queriedObject->post_type) && $queriedObject->post_type === 'onepage' && is_single()) {
-            return MODULARITY_ONEPAGE_TEMPLATE_PATH . 'single-onepage.php';
-        }
-
-        return $template;
     }
 
     public function registerSidebar()
@@ -105,15 +88,15 @@ class App
             'description'          => __('Onepage content', 'modularity-onepage'),
             'menu_icon'            => $icon,
             'public'               => true,
-            'publicly_queriable'   => true,
+            'publicly_queriable'   => false,
             'show_ui'              => true,
-            'show_in_nav_menus'    => true,
+            'show_in_nav_menus'    => false,
             'menu_position'        => 350,
             'has_archive'          => true,
             'hierarchical'         => false,
-            'exclude_from_search'  => false,
+            'exclude_from_search'  => true,
             'taxonomies'           => array(),
-            'supports'             => array('title', 'revisions', 'thumbnail', 'author', 'page-attributes', 'templates')
+            'supports'             => array('title', 'editor', 'revisions', 'thumbnail', 'author', 'page-attributes', 'templates')
         );
 
         register_post_type('onepage', $args);
