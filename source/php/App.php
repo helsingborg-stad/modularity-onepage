@@ -7,8 +7,48 @@ class App
     public function __construct()
     {
         add_action('init', array($this, 'registerPostType'));
+        add_filter('Modularity/CoreTemplatesSearchPaths', array($this, 'addTemplateSearchPaths'));
+        add_filter('template_include', array($this, 'singleTemplate'));
     }
 
+    /**
+     * Get the single template for onepage single posts
+     * @param  string $template Default template
+     * @return string           Template to use
+     */
+    public function singleTemplate($template)
+    {
+        $queriedObject = get_queried_object();
+
+        if (isset($queriedObject->post_type) && $queriedObject->post_type === 'onepage' && is_single()) {
+            return MODULARITY_ONEPAGE_TEMPLATE_PATH . 'onepage-section.php';
+        }
+
+        return $template;
+    }
+
+    /**
+     * Puts the onepage post type in the list of activated post types in modularity
+     * @return void
+     */
+    public function putInModularitySettings()
+    {
+        $options = get_option('modularity-options');
+        if (!isset($options['enabled-post-types'])) {
+            $options['enabled-post-types'] = array();
+        }
+
+        if (!in_array('onepage', $options['enabled-post-types'])) {
+            $options['enabled-post-types'][] = 'onepage';
+        }
+
+        update_option('modularity-options', $options);
+    }
+
+    /**
+     * Creates the onepage sections post type
+     * @return void
+     */
     public function registerPostType()
     {
         $nameSingular = __('Onepage section', 'modularity-onepage');
@@ -51,15 +91,12 @@ class App
 
         register_post_type('onepage', $args);
 
-        $options = get_option('modularity-options');
-        if (!isset($options['enabled-post-types'])) {
-            $options['enabled-post-types'] = array();
-        }
+        $this->putInModularitySettings();
+    }
 
-        if (!in_array('onepage', $options['enabled-post-types'])) {
-            $options['enabled-post-types'][] = 'onepage';
-        }
-
-        update_option('modularity-options', $options);
+    public function addTemplateSearchPaths($paths)
+    {
+        $paths[] = MODULARITY_ONEPAGE_TEMPLATE_PATH;
+        return $paths;
     }
 }
