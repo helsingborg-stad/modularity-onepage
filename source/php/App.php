@@ -7,6 +7,7 @@ class App
     public function __construct()
     {
         add_action('init', array($this, 'registerPostType'));
+        add_action('widgets_init', array($this, 'registerSidebar'));
         add_filter('Modularity/CoreTemplatesSearchPaths', array($this, 'addTemplateSearchPaths'));
         add_filter('template_include', array($this, 'singleTemplate'));
     }
@@ -21,10 +22,36 @@ class App
         $queriedObject = get_queried_object();
 
         if (isset($queriedObject->post_type) && $queriedObject->post_type === 'onepage' && is_single()) {
-            return MODULARITY_ONEPAGE_TEMPLATE_PATH . 'onepage-section.php';
+            return MODULARITY_ONEPAGE_TEMPLATE_PATH . 'single-onepage.php';
         }
 
         return $template;
+    }
+
+    public function registerSidebar()
+    {
+        register_sidebar(array(
+            'id'            => 'onepage-sidebar',
+            'name'          => __('Onepage sidebar (Modularity Onepage)', 'modularity-onepage'),
+            'description'   => __('The onepage sidebar area', 'modularity-onepage'),
+            'before_widget' => apply_filters('ModularityOnePage/before_widget', '<div class="%2$s">'),
+            'after_widget'  => apply_filters('ModularityOnePage/after_widget', '</div>'),
+            'before_title'  => apply_filters('ModularityOnePage/before_title', '<h3>'),
+            'after_title'   => apply_filters('ModularityOnePage/after_title', '</h3>')
+        ));
+
+        $options = get_option('modularity-options');
+
+        if (!isset($options['enabled-areas'])) {
+            $options['enabled-areas'] = array();
+        }
+
+        if (!isset($options['enabled-areas']['single-onepage'])) {
+            $options['enabled-areas']['single-onepage'] = array();
+        }
+
+        $options['enabled-areas']['single-onepage'][] = 'onepage-sidebar';
+        update_option('modularity-options', $options);
     }
 
     /**
