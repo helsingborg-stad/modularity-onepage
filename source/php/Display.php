@@ -79,15 +79,19 @@ class Display
 
         $modules = $modules['onepage-sidebar']['modules'];
 
-        $i = 0;
-        foreach ($modules as $module) {
-            $i++;
+        if (is_array($modules) && !empty($modules)) {
 
-            if ($i !== 1) {
-                $markup .= "\n\n";
+            $i = 0;
+            foreach ($modules as $module) {
+                $i++;
+
+                if ($i !== 1) {
+                    $markup .= "\n\n";
+                }
+
+                $markup .= \Modularity\App::$display->outputModule($module, $wp_registered_sidebars['onepage-sidebar'], array(), false);
             }
 
-            $markup .= \Modularity\App::$display->outputModule($module, $wp_registered_sidebars['onepage-sidebar'], array(), false);
         }
 
         return $markup;
