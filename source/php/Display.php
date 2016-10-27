@@ -32,7 +32,7 @@ class Display
         $sectionClasses = apply_filters('ModularityOnePage/section_class', array(
             'modularity-onepage-section',
             'modularity-onepage-section-%1$d'
-        ));
+        ), $section->ID);
 
         $sectionClasses = implode(' ', $sectionClasses);
         $sectionClasses = sprintf(
