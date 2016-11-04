@@ -34,6 +34,8 @@ class Display
             'modularity-onepage-section-%1$d'
         ), $section->ID);
 
+        $sectionId = apply_filters('ModularityOnePage/section_id', 'onepagesection-' . $section->ID, $section->ID);
+
         $sectionClasses = implode(' ', $sectionClasses);
         $sectionClasses = sprintf(
             $sectionClasses,
@@ -43,19 +45,19 @@ class Display
         // Section start
         $markup = apply_filters(
             'ModularityOnePage/before_section',
-            '<section class="' . $sectionClasses . '"><div class="container">'
+            '<section id="' . $sectionId . '" class="' . $sectionClasses . '"><div class="container">'
         );
 
         // Title and content
-        $markup .= apply_filters('ModularityOnePage\before_content', '<div class="grid"><div class="grid-md-12"><article>');
+        $markup .= apply_filters('ModularityOnePage/before_content', '<div class="grid"><div class="grid-md-12"><article>');
         $markup .= '<h1 class="modularity-onepage-section-title">'  . apply_filters('the_title', $section->post_title) . '</h1>';
         $markup .= apply_filters('the_content', $section->post_content);
-        $markup .= apply_filters('ModularityOnePage\after_content', '</article></div></div>');
+        $markup .= apply_filters('ModularityOnePage/after_content', '</article></div></div>');
 
         // Modules
-        $markup .= apply_filters('ModularityOnePage\before_modules', '<div class="grid">');
+        $markup .= apply_filters('ModularityOnePage/before_modules', '<div class="grid">');
         $markup .= self::renderModules($section->ID);
-        $markup .= apply_filters('ModularityOnePage\after_modules', '</div>');
+        $markup .= apply_filters('ModularityOnePage/after_modules', '</div>');
 
         // Section end
         $markup .= apply_filters(

@@ -11,6 +11,8 @@ class App
         add_filter('Modularity/CoreTemplatesSearchPaths', array($this, 'addTemplateSearchPaths'));
 
         add_filter('template_include', array($this, 'singleTemplate'));
+
+        add_filter('post_link', array($this,'removeSinglePermalinks'), 10, 3);
     }
 
     /**
@@ -107,11 +109,11 @@ class App
             'description'          => __('Onepage content', 'modularity-onepage'),
             'menu_icon'            => $icon,
             'public'               => true,
-            'publicly_queriable'   => false,
+            'publicly_queriable'   => true,
             'show_ui'              => true,
             'show_in_nav_menus'    => false,
             'menu_position'        => 350,
-            'has_archive'          => true,
+            'has_archive'          => false,
             'hierarchical'         => false,
             'exclude_from_search'  => true,
             'taxonomies'           => array(),
@@ -121,6 +123,15 @@ class App
         register_post_type('onepage', $args);
 
         $this->putInModularitySettings();
+    }
+
+    public function removeSinglePermalinks($url, $post = NULL, $leavename = NULL)
+    {
+        if (0 === strpos($url, get_post_type_archive_link('onepage'))) {
+            return get_post_type_archive_link('onepage');
+        }
+
+        return $url;
     }
 
     public function addTemplateSearchPaths($paths)
