@@ -7,9 +7,6 @@ class App
     public function __construct()
     {
 
-        //Purge varnish when needed
-        new ModularityOnePage\Helper\Varnish;
-
         add_action('init', array($this, 'registerPostType'));
         add_action('widgets_init', array($this, 'registerSidebar'));
         add_filter('Modularity/CoreTemplatesSearchPaths', array($this, 'addTemplateSearchPaths'));

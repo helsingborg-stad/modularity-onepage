@@ -35,3 +35,6 @@ $loader->register();
 
 // Start application
 new ModularityOnePage\App();
+
+//Purge varnish when needed
+new ModularityOnePage\Helper\Varnish();
