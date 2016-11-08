@@ -6,13 +6,17 @@ class App
 {
     public function __construct()
     {
+
+        //Purge varnish when needed
+        new ModularityOnePage\Helper\Varnish;
+
         add_action('init', array($this, 'registerPostType'));
         add_action('widgets_init', array($this, 'registerSidebar'));
         add_filter('Modularity/CoreTemplatesSearchPaths', array($this, 'addTemplateSearchPaths'));
 
         add_filter('template_include', array($this, 'singleTemplate'));
 
-        add_filter('post_link', array($this,'removeSinglePermalinks'), 10, 3);
+        add_filter('post_link', array($this, 'removeSinglePermalinks'), 10, 3);
     }
 
     /**
@@ -125,7 +129,7 @@ class App
         $this->putInModularitySettings();
     }
 
-    public function removeSinglePermalinks($url, $post = NULL, $leavename = NULL)
+    public function removeSinglePermalinks($url, $post = null, $leavename = null)
     {
         if (0 === strpos($url, get_post_type_archive_link('onepage'))) {
             return get_post_type_archive_link('onepage');
