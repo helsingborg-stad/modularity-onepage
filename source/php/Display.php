@@ -17,7 +17,8 @@ class Display
             'post_type' => 'onepage',
             'post_status' => $postStatus,
             'orderby' => 'menu_order',
-            'order' => 'asc'
+            'order' => 'asc',
+            'posts_per_page'   => -1
         ));
 
         foreach ($sections as $section) {
