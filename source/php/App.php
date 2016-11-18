@@ -14,6 +14,20 @@ class App
         add_filter('template_include', array($this, 'singleTemplate'));
 
         add_filter('post_link', array($this, 'removeSinglePermalinks'), 10, 3);
+        add_filter('post_row_actions', array($this, 'rowActions'), 10, 2);
+    }
+
+    public function rowActions($actions, $post)
+    {
+        if ($post->post_type !== 'onepage') {
+            return $actions;
+        }
+
+        if (isset($actions['view'])) {
+            unset($actions['view']);
+        }
+
+        return $actions;
     }
 
     /**
