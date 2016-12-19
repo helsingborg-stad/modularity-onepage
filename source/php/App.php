@@ -4,9 +4,10 @@ namespace ModularityOnePage;
 
 class App
 {
+    public static $onepagePages = array();
+
     public function __construct()
     {
-
         add_action('init', array($this, 'registerPostType'));
         add_action('widgets_init', array($this, 'registerSidebar'));
         add_filter('Modularity/CoreTemplatesSearchPaths', array($this, 'addTemplateSearchPaths'));
@@ -91,12 +92,23 @@ class App
         update_option('modularity-options', $options);
     }
 
+    public static function isOnepage()
+    {
+        if (is_front_page() && in_array('front-page', self::$onepagePages)) {
+            return true;
+        }
+
+        return in_array(get_the_id(), self::$onepagePages);
+    }
+
     /**
      * Creates the onepage sections post type
      * @return void
      */
     public function registerPostType()
     {
+        self::$onepagePages = apply_filters('ModylarityOnePage/pages', array());
+
         $nameSingular = __('Onepage', 'modularity-onepage');
         $namePlural = __('Onepage', 'modularity-onepage');
 
